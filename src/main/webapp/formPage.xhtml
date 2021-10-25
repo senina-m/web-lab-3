@@ -6,6 +6,41 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view>
-    <h:outputLabel value="Hello, world"/>
+    <h:form id='form' class='form' method="get">
+        <fieldset class="formBox">
+            <legend>Enter coordinates:</legend>
+            <div>
+                <div>
+                    <h:outputLabel for="x">X: </h:outputLabel>
+                    <h:selectBooleanCheckbox id="x" name="x" class='x' value="#{coordinates.x}">
+                        <option value="-4" selected="selected">-4</option>
+                        <option value="-3">-3</option>
+                        <option value="-2">-2</option>
+                        <option value="-1">-1</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </h:selectBooleanCheckbox>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h:outputLabel for="y">Y:</h:outputLabel>
+                    <h:inputText class='y field' id="y" name="y" value="#{coordinates.y}"/>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h:outputLabel for="r">R:</h:outputLabel>
+                    <h:inputText type="text" class='r field' id="r" name="r" value="#{coordinates.r}"/>
+                </div>
+            </div>
+            <div>
+                <h:commandButton id="submitButton" onclick="processData(event)" class='validateBtn' value="Submit"/>
+            </div>
+        </fieldset>
+    </h:form>
 </f:view>
 </html>
