@@ -1,0 +1,59 @@
+.clearButton {
+    width: 100%;
+}
+
+.title {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.title_label {
+    display: inline-block;
+    margin-left: 2%;
+    margin-right: 10%;
+}
+
+#heat {
+    display: inline-block;
+    alignment: right;
+}
+
+.top_box {
+    display: grid;
+    grid-template-columns: 30% 40% 40%;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.plot {
+    margin-left: 3%;
+    margin-right: 5%;
+}
+
+.form {
+    width: 100%;
+    height: 200%;
+}
+
+.table{
+    width: 100%;
+}
+
+.description {
+    width: 60%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.main_block {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.box{
+    flex: 1 1 150px; /*  Stretching: */
+    /*flex: 0 1 150px; !*  No stretching: *!*/
+    margin: 10px;
+}
