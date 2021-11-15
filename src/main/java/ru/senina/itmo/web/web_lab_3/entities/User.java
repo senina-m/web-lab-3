@@ -12,6 +12,6 @@ public class User {
     private Long sessionId;
 
     // orphanRemoval = true - если мы хотим убивать все LabWork когда умер user
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Attempt> attemptList;
 }
