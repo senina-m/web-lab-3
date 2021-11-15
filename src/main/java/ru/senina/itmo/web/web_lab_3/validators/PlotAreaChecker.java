@@ -5,10 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import ru.senina.itmo.web.web_lab_3.entities.Coordinates;
 
 import javax.enterprise.context.Dependent;
+import java.io.Serializable;
 
 @NoArgsConstructor
 @Dependent
-public class PlotAreaChecker {
+public class PlotAreaChecker implements Serializable {
 
     public boolean check(@NotNull Coordinates coordinates) {
         double x = coordinates.getX();

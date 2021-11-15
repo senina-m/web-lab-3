@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Web Lab 3</title>
+<!--    <h:outputScript library="primefaces" name="jquery/jquery.js"/>-->
+</h:head>
+
+<h:body>
+    <ui:insert name="header">
+        <ui:include src="header.xhtml"/>
+    </ui:insert>
+
+    <div id="chart"></div>
+
+    <h:form id='form' class='form' method="get">
+        <fieldset class="formBox">
+            <legend>Enter coordinates:</legend>
+            <div>
+                <div>
+                    <h:outputLabel for="x">X: </h:outputLabel>
+                    <h:selectBooleanCheckbox id="x"
+                                             name="x"
+                                             class='x'
+                                             value="#{attemptManager.attempt.coordinates.x}"
+                                             required="true">
+                        <option value="-4" selected="selected">-4</option>
+                        <option value="-3">-3</option>
+                        <option value="-2">-2</option>
+                        <option value="-1">-1</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </h:selectBooleanCheckbox>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h:outputLabel for="y">Y:</h:outputLabel>
+<!--                   TODO: Add method to check this field like onchange="validate()" attribute-->
+                    <h:inputText class='y field'
+                                 id="y"
+                                 name="y"
+                                 value="#{attemptManager.attempt.coordinates.y}"
+                                 required="true"/>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <h:outputLabel for="r">R:</h:outputLabel>
+                    <h:inputText class='r field'
+                                 id="r"
+                                 name="r"
+                                 value="#{attemptManager.attempt.coordinates.r}"
+                                 required="true"/>
+                </div>
+            </div>
+            <div>
+                <h:commandButton id="submitButton"
+                                 ajax="false"
+                                 class='validateBtn'
+                                 value="Submit"
+                                 action="#{attemptManager.addToList()}"/>
+            </div>
+        </fieldset>
+    </h:form>
+
+    <h:outputLabel> #{attemptsList.listToJson}</h:outputLabel>
+
+    <h:panelGroup id="entriesTable">
+        <h:dataTable value="#{attemptsList.list}" var="attempt">
+            <h:column>
+                <f:facet name="header">X</f:facet>
+                #{attempt.coordinates.x}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Y</f:facet>
+                #{attempt.coordinates.y}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">R</f:facet>
+                #{attempt.coordinates.r}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Result</f:facet>
+                #{attempt.doFitArea}
+            </h:column>
+        </h:dataTable>
+    </h:panelGroup>
+<!--    <h:outputScript library="js" name="draw.js"/>-->
+</h:body>
+</html>

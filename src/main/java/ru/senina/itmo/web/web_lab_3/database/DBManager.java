@@ -3,6 +3,8 @@ package ru.senina.itmo.web.web_lab_3.database;
 import lombok.extern.java.Log;
 import ru.senina.itmo.web.web_lab_3.entities.Attempt;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -16,6 +18,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 
 @Log
+@Named()
+@ApplicationScoped
 public class DBManager {
     private static final int tokenLength = 50;
     private static final EntityManagerFactory entityManagerFactory = setEntityManagerFactory();
