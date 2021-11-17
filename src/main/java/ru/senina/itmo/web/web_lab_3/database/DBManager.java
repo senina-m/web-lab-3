@@ -30,6 +30,8 @@ public class DBManager {
             final Properties properties = new Properties();
             properties.load(jpaFileInput);
             return Persistence.createEntityManagerFactory("MyJPAModel", properties);
+            //we can also inject EntityManagerFactory by annotation @PersistenceUnit(name = "MyJPAModel")
+            //but i need to set parameters to MyJPAModel configuration (set password, login and db_name)
         } catch (IOException e) {
             e.printStackTrace();
         }

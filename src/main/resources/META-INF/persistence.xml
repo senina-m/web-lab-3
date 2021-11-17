@@ -3,6 +3,39 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
-    <persistence-unit name="default">
+
+    <!--  The transaction-type can be JTA or RESOURCE_LOCAL
+    Traditionally, Java EE apps used JTA by default, which requires having a JTA transaction manager that uses
+    the 2PC (Two-Phase Commit) protocol to apply changes atomically to multiple sources of data. And if you don't want
+    to save data to save changes to many data source, then you don't need JTA, so the RESOURCE_LOCAL is better.
+    For instance, by default, Spring applications use RESOURCE_LOCAL transactions, and to use JTA, you need to
+    explicitly choose the JtaTransactionManager Spring bean.-->
+    <persistence-unit name="MyJPAModel" transaction-type="RESOURCE_LOCAL">
+        <!-- Persistence provider -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <jta-data-source>java:jboss/MyJtaName</jta-data-source>
+
+        <!-- Entity classes, we can skip them here and just mark by @Entity, or put into <exclude-unlisted-classes>
+             tag to show that they haven't use -->
+        <class>ru.senina.itmo.web.web_lab_3.entities.Attempt</class>
+        <class>ru.senina.itmo.web.web_lab_3.entities.User</class>
+        <class>ru.senina.itmo.web.web_lab_3.entities.Coordinates</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" /> <!--jdbc Oracle Driver-->
+<!--        <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />jdbc Oracle Driver-->
+            <property name="javax.persistence.jdbc.url" value="DB_URL" />  <!-- BD Url -->
+            <property name="javax.persistence.jdbc.user" value="login" /> <!-- DB User -->
+            <property name="javax.persistence.jdbc.password" value="password" /> <!-- DB Password -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle8iDialect" /> <!--check the dialect-->
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect" postgres dialect/>
+            <property name="hibernate.current_session_context_class" value="jta"/> -->
+
+            <property name="hibernate.hbm2ddl.auto" value="update" /> <!-- create / create-drop / update -->
+
+            <property name="hibernate.show_sql" value="true" /> <!-- Show SQL in console -->
+            <property name="hibernate.format_sql" value="true" /> <!-- Show SQL formatted -->
+        </properties>
     </persistence-unit>
 </persistence>
