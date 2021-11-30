@@ -11,36 +11,48 @@ repositories {
 }
 
 ext {
-    junitVersion = '5.7.1'
+    junitVersion = '5.8.1'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    implementation 'org.jetbrains:annotations:20.1.0'
-    compileOnly 'javax.mvc:javax.mvc-api:1.0.0'
-    compileOnly 'javax.faces:javax.faces-api:2.3'
-    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
-    compileOnly 'javax.enterprise:cdi-api:1.0'
-    implementation'org.hibernate:hibernate-core:5.4.29.Final'
-    compile 'com.oracle.database.jdbc:ojdbc8:21.3.0.0' //if we use oracle db
-    compile 'org.postgresql:postgresql:42.2.19' //if we use postgres db
-
-
-
-
+    implementation 'org.jetbrains:annotations:22.0.0'
+    compileOnly 'javax.mvc:javax.mvc-api:1.0-pr'
+    compileOnly 'javax.faces:javax.faces-api:2.3-pfd'
+    compileOnly 'javax.enterprise:cdi-api:2.0-PFD2'
+    compileOnly 'javax.persistence:javax.persistence-api:2.2'
+    implementation 'org.hibernate:hibernate-entitymanager:5.4.18.Final'
+//  implementation 'org.eclipse.persistence:eclipselink:3.0.2'
+    compileOnly 'com.oracle.database.jdbc:ojdbc8:21.1.0.0' //if we use oracle db
+    compileOnly 'com.oracle.ojdbc:orai18n:19.3.0.0'
+//  compile 'org.postgresql:postgresql:42.3.1' //if we use postgres db
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     implementation 'com.jwebmp.jackson.datatype:jackson-datatype-jsr310:0.63.0.19'
 
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 test {
     useJUnitPlatform()
+    systemProperty "file.encoding", "utf-8"
+}
+
+war{
+    manifest {
+        // include attributes from a custom manifest file
+//        from("src/main/resources/CUSTOM-MANIFEST.MF")
+        // specify custom attributes
+//        attributes('My-Attribute': 'value')
+    }
 }

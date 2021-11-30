@@ -2,7 +2,9 @@ FROM jboss/wildfly
 
 ARG login
 ARG password
-ARG dp_properties
+ARG db_url
+ARG db_user
+ARG db_password
 
 #ADD web-lab-3-1.0.war /opt/jboss/wildfly/standalone/deployments/
 
@@ -10,17 +12,19 @@ RUN /opt/jboss/wildfly/bin/add-user.sh "$login" "$password" --silent
 ADD standalone.xml /opt/jboss/wildfly/standalone/configuration
 
 #deploy jdbc driver for oracle
-ADD ojdbc8.jar /opt/jboss/wildfly/standalone/deployments
-#deploy jdbc driver for postgres
-ADD postgresql-42.3.1.jar /opt/jboss/wildfly/standalone/deployments
+ADD ojdbc8.jar /opt/jboss/wildfly/modules/system/layers/base/com/oracle/main/ojdbc8.jar
+#deploy charsets for db
+ADD orai18n.jar /opt/jboss/wildfly/modules/system/layers/base/com/oracle/main/orai18n.jar
+#add module to wildfly
+ADD  module.xml /opt/jboss/wildfly/modules/system/layers/base/com/oracle/main/module.xml
+#ADD  /opt/jboss/wildfly/standalone/deployments/postgresql-42.3.1.jar
 
-ADD dbproperties "$dp_properties"
-ENV DB_properties=/dbproperties
 #RUN mkdir -p /opt/wildfly/logs
 #VOLUME /opt/wildfly/logs
 
+RUN echo "javax.persistence.jdbc.url = $db_url" > /opt/jboss/wildfly/dbproperties && \
+    echo "javax.persistence.jdbc.user = $db_user" >> /opt/jboss/wildfly/dbproperties && \
+    echo "javax.persistence.jdbc.password = $db_password" >> /opt/jboss/wildfly/dbproperties
+
+ENV DB_properties=/opt/jboss/wildfly/dbproperties
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
-
-#docker run -p 8080:8080 -p 9990:9990 -it -v C:/ITMO/Programming/web-lab-3/build/libs/wars:/opt/jboss/wildfly/standalone/deployments/ --rm bd-lab3
-
-#build this image with --build-arg login --build-arg password

@@ -5,10 +5,15 @@ services:
       args:
         - login=${wildfly_user_login}
         - password=${wildfly_user_password}
-        - db_properties=${db_properties}
+        - db_url=${db_url}
+        - db_user=${db_user}
+        - db_password=${db_password}
+
     ports:
       - "8080:8080"
       - "9990:9990"
     volumes:
       - "C:/ITMO/Programming/web-lab-3/build/libs/wars:/opt/jboss/wildfly/standalone/deployments/"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
