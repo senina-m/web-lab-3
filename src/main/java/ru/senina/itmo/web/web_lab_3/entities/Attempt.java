@@ -1,12 +1,10 @@
 package ru.senina.itmo.web.web_lab_3.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @AllArgsConstructor
@@ -23,12 +21,20 @@ public class Attempt implements Serializable {
     private Long id;
 
     @ManyToOne()
-    private User user;
+    private Owner owner;
 
+    @Deprecated
     public Attempt(Coordinates coordinates, boolean check) {
         this.coordinates = coordinates;
         this.doFitArea = check;
-        this.user = null;
+        this.owner = null;
         this.id = null;
+    }
+
+    public static Attempt initAttempt() {
+        Attempt attempt = new Attempt();
+        attempt.setCoordinates(new Coordinates());
+        attempt.setOwner(new Owner());
+        return attempt;
     }
 }

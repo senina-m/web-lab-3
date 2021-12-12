@@ -6,12 +6,13 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
 @Named
 @SessionScoped
-@AllArgsConstructor @Getter @Setter @ToString
+@AllArgsConstructor @Getter @Setter
 public class Coordinates implements Serializable {
     private double x;
     private double y;
@@ -27,6 +28,7 @@ public class Coordinates implements Serializable {
     @JoinColumn(name = "coordinates_id")
     private Attempt attempt;
 
+    @Deprecated
     public Coordinates(double x, double y, double r) {
         this.x = x;
         this.y = y;

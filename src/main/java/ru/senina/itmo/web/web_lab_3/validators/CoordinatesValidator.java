@@ -2,15 +2,18 @@ package ru.senina.itmo.web.web_lab_3.validators;
 
 import ru.senina.itmo.web.web_lab_3.entities.Coordinates;
 import ru.senina.itmo.web.web_lab_3.exceptions.CoordinatesOutOfBoundsException;
+import ru.senina.itmo.web.web_lab_3.exceptions.NoCoordinatesParametersInRequest;
 
 import javax.enterprise.context.Dependent;
+import java.io.Serializable;
+import java.util.Optional;
 
 @Dependent
-public class CoordinatesValidator {
+public class CoordinatesValidator implements Serializable {
     public void validate(Coordinates coordinates){
-        double x = coordinates.getX();
-        double y = coordinates.getY();
-        double r = coordinates.getR();
+        double x = Optional.of(coordinates.getX()).orElseThrow(NoCoordinatesParametersInRequest::new);
+        double y = Optional.of(coordinates.getY()).orElseThrow(NoCoordinatesParametersInRequest::new);
+        double r = Optional.of(coordinates.getR()).orElseThrow(NoCoordinatesParametersInRequest::new);
 
         /* if value was integer but stored like double rounding and casting
         it do long wouldn't change it but we would be able to check if it was integer */

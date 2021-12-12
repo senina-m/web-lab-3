@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Web Lab 3</title>
+    <link rel="stylesheet" href="../../styles/main.css" />
+    <link rel="stylesheet" href="../../styles/mobile.css" />
+    <link rel="stylesheet" href="../../styles/screen.css" />
+    <script src="../../js/Plot.js" type="application/javascript"></script>
+    <script src="../../js/timer.js" type="application/javascript"></script>
+    <script src="../../js/timer.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"
+            type="application/javascript"></script>
+
+</h:head>
+
+<h:body onload="buttonsR()">
+    <ui:insert name="header">
+        <ui:include src="header.xhtml"/>
+    </ui:insert>
+
+
+    <h:form id='form' class='form' method="get">
+        <!--            <legend>Enter coordinates:</legend>-->
+        <p id="x_block">
+            <h:outputLabel value="X:" for="x"/> <br/>
+            <p:spinner id="x" stepFactor="0.5" a:placeholder="Enter X value"
+                       value="#{attemptManager.attempt.coordinates.x}">
+                <f:validateRequired/>
+                <f:validateLongRange minimum="-4" maximum="4"/>
+            </p:spinner>
+            <h:message for="x"/>
+        </p>
+        <p id="y_block">
+            <p:outputLabel value="Y:" for="y"/> <br/>
+            <p:inputText id="y" maxlength="5" a:placeholder="Y has to be between -5 and 5"
+                         value="#{attemptManager.attempt.coordinates.y}">
+                <f:validateRequired/>
+                <f:validateDoubleRange minimum="-5" maximum="5"/>
+            </p:inputText>
+            <h:message for="y"/>
+        </p>
+        <p id="r_block">
+            <h:outputLabel value="R:"/> <br/> <br/>
+            <p:commandButton value="1" type="button" styleClass="RButton b1" id="r1">
+                <f:ajax/>
+            </p:commandButton>
+            <p:commandButton value="2" type="button" styleClass="RButton b2" id="r2">
+                <f:ajax/>
+            </p:commandButton>
+            <p:commandButton value="3" type="button" styleClass="RButton b3" id="r3">
+                <f:ajax/>
+            </p:commandButton>
+            <p:commandButton value="4" type="button" styleClass="RButton b4" id="r4">
+                <f:ajax/>
+            </p:commandButton>
+            <p:commandButton value="5" type="button" styleClass="RButton b5" id="r5">
+                <f:ajax/>
+            </p:commandButton>
+            <h:panelGroup id="navigation_block" styleClass="hidden r">
+                <h:inputHidden value="#{attemptManager.attempt.coordinates.r}" id="hidden_r">
+                    <f:validateRequired/>
+                    <f:validateLongRange minimum="1" maximum="5"/>
+                </h:inputHidden>
+            </h:panelGroup>
+            <h:message for="hidden_r"/>
+            <span class="hide error"
+                  id="r error">You has to chose the only value!</span>
+            <br/>
+        </p>
+        <p>
+            <p:commandButton value="Submit" styleClass="button submit">
+                <p:ajax event="click" update="form:draw attemts_table" process="@this" listener="#{attemptManager.addToList()}"/>
+            </p:commandButton>
+            <p:remoteCommand name="update-command"
+                             action="#{attemptManager.addToList()}"
+                             update="attemts_table @form:draw"
+                             process="@this"/>
+        </p>
+        <p:outputPanel styleClass="draw" id="draw">
+            <script type="text/javascript">drawPlot(#{attemptManager.getJsonList()})</script>
+        </p:outputPanel>
+        <div class="plot" id="plot"></div>
+    </h:form>
+
+    <h:outputLabel> #{attemptsList.listToJson()}</h:outputLabel>
+
+    <div>
+        <h:panelGroup id="attemts_table">
+            <h:dataTable id="result_table" value="#{attemptsList.getList()}" var="attempt">
+                <h:column>
+                    <f:facet name="header">X</f:facet>
+                    #{attempt.coordinates.x}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Y</f:facet>
+                    #{attempt.coordinates.y}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">R</f:facet>
+                    #{attempt.coordinates.r}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Result</f:facet>
+                    #{attempt.doFitArea}
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+    </div>
+
+    <div class="for_link">
+        <h:link styleClass="link_to-index" outcome="">
+            Go to start page
+        </h:link>
+    </div>
+</h:body>
+</html>

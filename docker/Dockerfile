@@ -2,9 +2,6 @@ FROM jboss/wildfly
 
 ARG login
 ARG password
-ARG db_url
-ARG db_user
-ARG db_password
 
 #ADD web-lab-3-1.0.war /opt/jboss/wildfly/standalone/deployments/
 
@@ -21,10 +18,6 @@ ADD  module.xml /opt/jboss/wildfly/modules/system/layers/base/com/oracle/main/mo
 
 #RUN mkdir -p /opt/wildfly/logs
 #VOLUME /opt/wildfly/logs
-
-RUN echo "javax.persistence.jdbc.url = $db_url" > /opt/jboss/wildfly/dbproperties && \
-    echo "javax.persistence.jdbc.user = $db_user" >> /opt/jboss/wildfly/dbproperties && \
-    echo "javax.persistence.jdbc.password = $db_password" >> /opt/jboss/wildfly/dbproperties
 
 ENV DB_properties=/opt/jboss/wildfly/dbproperties
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
