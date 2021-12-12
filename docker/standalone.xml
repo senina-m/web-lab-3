@@ -161,7 +161,7 @@
                         <prefill>true</prefill>
                     </pool>
                     <security>
-                        <user-name>user</user-name>
+                        <user-name>name</user-name>
                         <password>password</password>
                     </security>
                     <validation>

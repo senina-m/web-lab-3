@@ -14,13 +14,13 @@
     <link rel="stylesheet" href="../../styles/screen.css" />
     <script src="../../js/Plot.js" type="application/javascript"></script>
     <script src="../../js/timer.js" type="application/javascript"></script>
-    <script src="../../js/timer.js" type="application/javascript"></script>
+    <script src="../../js/onPageLoad.js" type="application/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"
             type="application/javascript"></script>
 
 </h:head>
 
-<h:body onload="buttonsR()">
+<h:body onload="runPageOnloadFunctions()">
     <ui:insert name="header">
         <ui:include src="header.xhtml"/>
     </ui:insert>
@@ -63,20 +63,21 @@
             <p:commandButton value="5" type="button" styleClass="RButton b5" id="r5">
                 <f:ajax/>
             </p:commandButton>
-            <h:panelGroup id="navigation_block" styleClass="hidden r">
-                <h:inputHidden value="#{attemptManager.attempt.coordinates.r}" id="hidden_r">
+            <h:panelGroup styleClass="hidden block_r">
+                <h:inputHidden value="#{attemptManager.attempt.coordinates.r}" id="navigation_block">
                     <f:validateRequired/>
                     <f:validateLongRange minimum="1" maximum="5"/>
                 </h:inputHidden>
             </h:panelGroup>
-            <h:message for="hidden_r"/>
+            <h:message for="navigation_block"/>
             <span class="hide error"
                   id="r error">You has to chose the only value!</span>
             <br/>
         </p>
         <p>
             <p:commandButton value="Submit" styleClass="button submit">
-                <p:ajax event="click" update="form:draw attemts_table" process="@this" listener="#{attemptManager.addToList()}"/>
+                <p:ajax event="click" update="form:draw attemts_table"
+                        process="@this" listener="#{attemptManager.addToList()}"/>
             </p:commandButton>
             <p:remoteCommand name="update-command"
                              action="#{attemptManager.addToList()}"

@@ -18,11 +18,9 @@ let globalAttemptsArray;
 
 drawPlot = (attemptsArray) => {
     console.log("Полученный массив точек: \"" + attemptsArray + "\"");
-    CANVAS = SVG()
-        .addTo('#plot')
-        .size('100%', '100%')
-        .viewbox(0, 0, WIDTH, HEIGHT);
-    if (attemptsArray.length === 0) {
+    if(CANVAS === null){
+        console.log("CANVAS wasn't init yet!")
+    }else if (attemptsArray.length === 0) {
         initPlot();
     } else {
         globalAttemptsArray = attemptsArray;
@@ -71,6 +69,7 @@ drawPlotWithPoints = (attemptsArray) => {
     drawRValue(r);
 }
 
+//fixme fix clearing
 clearPlot = () => {
     if (submitGetRequest({session: "clear"}, "/web-lab-2-1.2/controller")) {
         initPlot();
@@ -234,23 +233,23 @@ getCoordinates = () => {
     return [x, y, r]
 }
 
-function clickPointEvent(event) {
-    console.log('Start drawing point after click! Received coords: ' + event.clientX + ', ' + event.clientY);
-    let plot = document.getElementById('plot');
-    let coordinates = getCoords(event, plot);
-    if (!isNaN(coordinates.r)) {
-        document.getElementById('x').value = coordinates.x;
-        document.getElementById('y').value = coordinates.y;
-        document.getElementById('r').value = coordinates.r;
-        removeErrors();
-        if (checkValues(coordinates)) {
-            console.log('Try to draw point after click. Coordinates: x: ' + coordinates.x + ', y: ' + coordinates.y + ', r: ' + coordinates.r);
-            update - command()
-        }
-    } else {
-        document.getElementById("error").classList.remove("hide");
-    }
-}
+// function clickPointEvent(event) {
+//     console.log('Start drawing point after click! Received coords: ' + event.clientX + ', ' + event.clientY);
+//     let plot = document.getElementById('plot');
+//     let coordinates = getCoords(event, plot);
+//     if (!isNaN(coordinates.r)) {
+//         document.getElementById('x').value = coordinates.x;
+//         document.getElementById('y').value = coordinates.y;
+//         document.getElementById('r').value = coordinates.r;
+//         removeErrors();
+//         if (checkValues(coordinates)) {
+//             console.log('Try to draw point after click. Coordinates: x: ' + coordinates.x + ', y: ' + coordinates.y + ', r: ' + coordinates.r);
+//             update - command()
+//         }
+//     } else {
+//         document.getElementById("error").classList.remove("hide");
+//     }
+// }
 
 function getCoords(event, element) {
     let coordinates = {};
@@ -269,35 +268,4 @@ function getCoords(event, element) {
     console.log('Y: ' + coordinates.y);
     console.log('R: ' + coordinates.r);
     return coordinates;
-}
-
-buttonsR = () => {
-    let rBlock = document.getElementById('navigation_block');
-    if (currentR === 0) {
-        currentR = DEFAULT_R;
-    }
-
-    if (rBlock.val() === "0") {
-        rBlock.val(currentR);
-        console.log("no blocks was chosen use default(current) value: " + currentR);
-    } else {
-        currentR = rBlock.val();
-        console.log("block was chosen, change currentR value to " + currentR);
-    }
-
-    document.querySelectorAll(".RButton b" + currentR)
-        .forEach(button => button.addClass("active"));
-
-    document.querySelectorAll('#r-input .r_button')
-            .forEach(button => {
-                button.on('click', function () {
-                    button.addClass('active');
-                    document.querySelectorAll('#r-input .r_button')
-                            .forEach(otherButtons => otherButtons.not(button).removeClass('active'));
-                    // currentR = button.attr("id").split('').pop();
-                    currentR = button.valueOf(); //todo:!!!!!!!!!!!!!!!!!!!!
-                    rBlock.val(currentR);
-                    drawPlot(globalAttemptsArray);
-                });
-            });
 }

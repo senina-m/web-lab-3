@@ -1,4 +1,4 @@
-package ru.senina.itmo.web.web_lab_3.validators;
+package ru.senina.itmo.web.web_lab_3.validators.areaCheckers;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;

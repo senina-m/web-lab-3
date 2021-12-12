@@ -7,14 +7,13 @@ import ru.senina.itmo.web.web_lab_3.database.DBManager;
 import ru.senina.itmo.web.web_lab_3.entities.Attempt;
 import ru.senina.itmo.web.web_lab_3.entities.Coordinates;
 import ru.senina.itmo.web.web_lab_3.validators.CoordinatesValidator;
-import ru.senina.itmo.web.web_lab_3.validators.PlotAreaChecker;
+import ru.senina.itmo.web.web_lab_3.validators.areaCheckers.PlotAreaChecker;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.List;
 import java.util.logging.Level;
 
 @Named()
@@ -24,7 +23,7 @@ public class AttemptManager implements Serializable {
 
     @Getter @Setter
     private Attempt attempt;
-    @Inject private PlotAreaChecker checker;
+    @Inject private PlotAreaChecker checker; //todo: use new areaCheckBuilder
     @Inject private CoordinatesValidator validator;
     @Inject private AttemptsList attemptsList;
     @Inject private DBManager dbManager;
@@ -49,8 +48,8 @@ public class AttemptManager implements Serializable {
         log.log(Level.WARNING, "New Attempt added: " + attempt + " User id: " +
                 FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
         dbManager.addElement(attempt, FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
-        }catch (Exception ignored){
-            log.log(Level.WARNING, "Incorrect data came to JSF.");
+        }catch (Exception exception){
+            log.log(Level.WARNING, "Incorrect data came to JSF. \n" + exception.getMessage());
         }finally {
             attempt = Attempt.initAttempt();
         }
