@@ -21,17 +21,23 @@ rButtonsListeners = () => {
             .forEach(button => button.addClass("active"));
     }
 
-    document.querySelectorAll('#r-input .r_button')
+    document.querySelectorAll('.RButton')
         .forEach(button => {
-            button.on('click', function () {
-                button.addClass('active');
-                document.querySelectorAll('#r-input .r_button')
-                    .forEach(otherButtons => otherButtons.not(button).removeClass('active'));
-                currentR = button.attr("id").split('').pop();
+            button.onclick = () => {
+                button.classList.toggle ("active", true); //add "active" class to button
+                document.querySelectorAll('.RButton')
+                    .forEach(otherButton => {
+                        if(otherButton !== button) {
+                            //for all other buttons remove "active" class
+                            otherButton.classList.toggle("active", false)
+                        }
+                    });
+                currentR = button.id.split('').pop();
+                // currentR = button.value;
                 console.log("currentR value: " + currentR);
                 rBlock.value = currentR;
                 drawPlot(globalAttemptsArray);
-            });
+            };
         });
 }
 

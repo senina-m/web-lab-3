@@ -152,7 +152,7 @@
         <subsystem xmlns="urn:jboss:domain:datasources:6.0">
             <datasources>
                 <datasource jndi-name="java:/OracleDS" pool-name="OracleDS">
-                    <connection-url>url</connection-url>
+                    <connection-url></connection-url>
                     <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
                     <driver>oracle</driver>
                     <pool>
@@ -161,8 +161,8 @@
                         <prefill>true</prefill>
                     </pool>
                     <security>
-                        <user-name>name</user-name>
-                        <password>password</password>
+                        <user-name></user-name>
+                        <password></password>
                     </security>
                     <validation>
                         <check-valid-connection-sql>SELECT 1 FROM DUAL</check-valid-connection-sql>

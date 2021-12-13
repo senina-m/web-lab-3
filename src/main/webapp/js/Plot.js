@@ -14,7 +14,7 @@ let clearedAt = 0;
 let lastElementNum = 0;
 const DEFAULT_R = 2;
 let currentR = DEFAULT_R;
-let globalAttemptsArray;
+let globalAttemptsArray = [];
 
 drawPlot = (attemptsArray) => {
     console.log("Полученный массив точек: \"" + attemptsArray + "\"");
