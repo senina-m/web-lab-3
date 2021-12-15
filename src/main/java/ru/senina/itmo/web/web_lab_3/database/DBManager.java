@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
+
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -21,9 +21,9 @@ import java.util.logging.Level;
 @Named()
 @ApplicationScoped
 public class DBManager {
-    private static final int tokenLength = 50;
 //    private static final EntityManagerFactory entityManagerFactory = setEntityManagerFactoryWithProperties();
-@PersistenceUnit(name = "MyJPAModel") private  EntityManagerFactory entityManagerFactory;
+@PersistenceUnit(name = "MyJPAModel")
+private  EntityManagerFactory entityManagerFactory;
 
     { //free the resource if shutdown
         Thread shutdownHook = new Thread(this::finish);
@@ -54,10 +54,6 @@ public class DBManager {
         assert entityManagerFactory != null;
         EntityManager manager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = null;
-        try {
-            transaction = manager.getTransaction();
-            transaction.begin();
-
             Owner owner = getOwnerBySessionId(manager, userSessionId);
             log.log(Level.WARNING, owner.toString());
             attempt.setOwner(owner);
@@ -66,6 +62,11 @@ public class DBManager {
             log.log(Level.WARNING, owner.toString());
             attempt.getCoordinates().setAttempt(attempt);
             log.log(Level.WARNING, attempt.toString());
+
+        try {
+            transaction = manager.getTransaction();
+            transaction.begin();
+
             manager.persist(attempt);
 
             transaction.commit();
@@ -73,7 +74,9 @@ public class DBManager {
             if (transaction != null) {
                 transaction.rollback();
             }
+            log.log(Level.WARNING, "There were some exceptions during adding Attempt. " + ex);
             log.log(Level.WARNING, "There were some exceptions during adding Attempt. " + ex.getMessage());
+            log.log(Level.WARNING, owner.toString());
         } finally {
             manager.close();
         }
@@ -105,15 +108,20 @@ public class DBManager {
 
 
     private Owner getOwnerBySessionId(EntityManager manager, String sessionId) {
+        log.log(Level.WARNING, "start to search for owner by session id");
         Query query = manager.createQuery("SELECT owner FROM Owner owner WHERE owner.sessionId=:sessionId", Owner.class);
         query.setParameter("sessionId", sessionId);
+        log.log(Level.WARNING, "just did request");
         Owner theOwner;
         try {
-            theOwner = (Owner) query.getSingleResult();
-        }catch (NoResultException e){
-            theOwner = new Owner();
+            return (Owner) query.getSingleResult();
+        }catch (Exception e){
+            theOwner = Owner.initOwner();
             theOwner.setSessionId(sessionId);
+            log.log(Level.WARNING, "Searching for owner with given id failed with error: " + e.getMessage());
+            log.log(Level.WARNING, "There were some exceptions during adding Attempt. " + e);
+            log.log(Level.WARNING, "the owner:" + theOwner);
+            return  theOwner;
         }
-        return  theOwner;
     }
 }

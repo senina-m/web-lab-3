@@ -6,6 +6,7 @@ import lombok.extern.java.Log;
 import ru.senina.itmo.web.web_lab_3.database.DBManager;
 import ru.senina.itmo.web.web_lab_3.entities.Attempt;
 import ru.senina.itmo.web.web_lab_3.entities.Coordinates;
+import ru.senina.itmo.web.web_lab_3.exceptions.CoordinatesOutOfBoundsException;
 import ru.senina.itmo.web.web_lab_3.validators.CoordinatesValidator;
 import ru.senina.itmo.web.web_lab_3.validators.areaCheckers.PlotAreaChecker;
 
@@ -42,14 +43,18 @@ public class AttemptManager implements Serializable {
 
     public void addToList(){
         try{
-        checkCoordinates(attempt.getCoordinates());
-        attempt.setDoFitArea(checkAttemptDoFitArea());
-        attemptsList.add(this.attempt);
-        log.log(Level.WARNING, "New Attempt added: " + attempt + " User id: " +
-                FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
-        dbManager.addElement(attempt, FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
+            log.log(Level.INFO, attempt.getCoordinates().toString());
+            checkCoordinates(attempt.getCoordinates());
+            attempt.setDoFitArea(checkAttemptDoFitArea());
+            attemptsList.add(this.attempt);
+            log.log(Level.WARNING, "New Attempt added: " + attempt + " User id: " +
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
+
+            dbManager.addElement(attempt, FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
+        }catch (CoordinatesOutOfBoundsException exception) {
+            log.log(Level.WARNING, "Incorrect data came to JSF: \n" + exception.getMessage());
         }catch (Exception exception){
-            log.log(Level.WARNING, "Incorrect data came to JSF. \n" + exception.getMessage());
+            log.log(Level.WARNING, exception.getMessage());
         }finally {
             attempt = Attempt.initAttempt();
         }

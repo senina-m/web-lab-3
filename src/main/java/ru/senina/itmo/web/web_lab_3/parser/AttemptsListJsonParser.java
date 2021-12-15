@@ -8,6 +8,7 @@ import ru.senina.itmo.web.web_lab_3.exceptions.ParsingException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.Arrays;
 
 
 @ApplicationScoped
@@ -44,7 +45,14 @@ public class AttemptsListJsonParser extends JsonParser<AttemptsList> {
         try {
             return AttemptsListJsonParser.getObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(list.getList());
         } catch (JsonProcessingException e) {
-            throw new ParsingException("Something wrong with parsing attempts list to string.");
+
+            throw new ParsingException("Something wrong with parsing attempts list to string. \n" + printList(list));
         }
+    }
+
+    private String printList(AttemptsList list){
+        StringBuilder sb = new StringBuilder();
+        Arrays.stream(list.getList()).forEach(attempt -> sb.append(attempt.toString()));
+        return sb.toString();
     }
 }

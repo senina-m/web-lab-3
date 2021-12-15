@@ -1,5 +1,6 @@
 package ru.senina.itmo.web.web_lab_3.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.enterprise.context.SessionScoped;
@@ -23,17 +24,28 @@ public class Coordinates implements Serializable {
     @Column(name = "coordinates_id")
     private Long id;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "coordinates_id")
     private Attempt attempt;
 
-    @Deprecated
     public Coordinates(double x, double y, double r) {
         this.x = x;
         this.y = y;
         this.r = r;
         this.id = null;
         this.attempt = null;
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "(x=" + x +
+                "; y=" + y +
+                "; r=" + r +
+                "), id=" + id +
+                ", attempts isn't null=" + (Objects.nonNull(attempt)) +
+                '}';
     }
 }

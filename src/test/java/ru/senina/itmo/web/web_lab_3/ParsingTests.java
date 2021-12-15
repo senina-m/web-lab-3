@@ -1,16 +1,18 @@
-package ru.senina.itmo.web.web_lab_2;
+package ru.senina.itmo.web.web_lab_3;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.testng.annotations.Test;
-
+import org.junit.jupiter.api.Test;
 import ru.senina.itmo.web.web_lab_3.dao.AttemptsList;
 import ru.senina.itmo.web.web_lab_3.entities.Attempt;
 import ru.senina.itmo.web.web_lab_3.entities.Coordinates;
+import ru.senina.itmo.web.web_lab_3.entities.Owner;
 import ru.senina.itmo.web.web_lab_3.parser.AttemptsListJsonParser;
 
-public class TestParsingAttemptsListToJson{
+import java.util.logging.Level;
+
+public class ParsingTests {
 
     public static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -21,11 +23,20 @@ public class TestParsingAttemptsListToJson{
 
     //fixme: deserialization
     @Test
-    @Deprecated
     public void testFromObjectToJson() {
+        //with Owner and id = null
         Attempt attempt1 = new Attempt(new Coordinates(1, 2, 4), true);
-        Attempt attempt2 = new Attempt(new Coordinates(-4, -5, 2), false);
-        Attempt attempt3 = new Attempt(new Coordinates(0, 0.3, 2.3), true);
+
+        //with full constructor
+        Attempt attempt2 = new Attempt(new Coordinates(-4, -5, 2), false, 1L ,Owner.initOwner());
+
+        //like in DB
+        Owner owner = Owner.initOwner();
+        Attempt attempt3 = new Attempt(new Coordinates(0, 0.3, 2.3), true, 1L , owner);
+        attempt3.setOwner(owner);
+        owner.getAttemptList().add(attempt3);
+        attempt3.getCoordinates().setAttempt(attempt3);
+
         AttemptsList attemptsList = new AttemptsList();
         attemptsList.add(attempt1);
         attemptsList.add(attempt2);
