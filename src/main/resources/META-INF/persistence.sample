@@ -25,9 +25,9 @@
         <properties>
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/> <!--jdbc Oracle Driver-->
             <property name="javax.persistence.jdbc.url"
-                      value=""/>  <!-- BD Url -->
-            <property name="javax.persistence.jdbc.user" value=""/> <!-- DB User -->
-            <property name="javax.persistence.jdbc.password" value=""/> <!-- DB Password -->
+                      value="DATABASE-URL"/>  <!-- BD Url -->
+            <property name="javax.persistence.jdbc.user" value="LOGIN"/> <!-- DB User -->
+            <property name="javax.persistence.jdbc.password" value="PASSWORD"/> <!-- DB Password -->
 
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/> <!-- create / create-drop / update -->
 
