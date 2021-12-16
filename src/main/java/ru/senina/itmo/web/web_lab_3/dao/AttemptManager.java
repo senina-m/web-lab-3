@@ -3,7 +3,6 @@ package ru.senina.itmo.web.web_lab_3.dao;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import ru.senina.itmo.web.web_lab_3.database.DBManager;
 import ru.senina.itmo.web.web_lab_3.entities.Attempt;
 import ru.senina.itmo.web.web_lab_3.entities.Coordinates;
 import ru.senina.itmo.web.web_lab_3.exceptions.CoordinatesOutOfBoundsException;
@@ -17,55 +16,76 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.logging.Level;
 
-@Named()
+@Named("attemptManager")
 @SessionScoped
 @Log
 public class AttemptManager implements Serializable {
-
-    @Getter @Setter
+    @Getter
+    @Setter
     private Attempt attempt;
-    @Inject private PlotAreaChecker checker; //todo: use new areaCheckBuilder
-    @Inject private CoordinatesValidator validator;
-    @Inject private AttemptsList attemptsList;
-    @Inject private DBManager dbManager;
+    @Inject
+    private PlotAreaChecker checker; //todo: use new areaCheckBuilder
+    @Inject
+    private CoordinatesValidator validator;
+    @Inject
+    private AttemptsList attemptsList;
+//    @Inject private DBManager dbManager;
 
-    public AttemptManager(){
+
+    public AttemptManager() {
         this.attempt = Attempt.initAttempt();
+        log.info("Timestamp (attemptManager constructor): " + System.currentTimeMillis());
     }
 
-    private boolean checkAttemptDoFitArea(){
+    private boolean checkAttemptDoFitArea(Attempt attempt) {
         return checker.check(attempt.getCoordinates());
     }
 
-    private void checkCoordinates(Coordinates coordinates){
+    private void checkCoordinates(Coordinates coordinates) {
         validator.validate(coordinates);
     }
 
-    public void addToList(){
-        try{
+    public void addToList(double r) {
+        try {
+            if(r == 0){
+                r = Double.parseDouble(FacesContext
+                        .getCurrentInstance()
+                        .getExternalContext()
+                        .getRequestParameterMap()
+                        .get("r_val"));
+            }
+            attempt.getCoordinates().setR(r);
+            log.info("R value = " + r);
+            log.info("Timestamp (addToList): " + System.currentTimeMillis());
             log.log(Level.INFO, attempt.getCoordinates().toString());
+
             checkCoordinates(attempt.getCoordinates());
-            attempt.setDoFitArea(checkAttemptDoFitArea());
-            attemptsList.add(this.attempt);
-            log.log(Level.WARNING, "New Attempt added: " + attempt + " User id: " +
+            attempt.setDoFitArea(checkAttemptDoFitArea(attempt));
+            attemptsList.add(attempt);
+            log.log(Level.INFO, "New Attempt added: " + attempt + " User id: " +
                     FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
 
-            dbManager.addElement(attempt, FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
-        }catch (CoordinatesOutOfBoundsException exception) {
+//            dbManager.addElement(attempt, FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
+        } catch (CoordinatesOutOfBoundsException exception) {
             log.log(Level.WARNING, "Incorrect data came to JSF: \n" + exception.getMessage());
-        }catch (Exception exception){
+        } catch (Exception exception) {
             log.log(Level.WARNING, exception.getMessage());
-        }finally {
+        } finally {
             attempt = Attempt.initAttempt();
         }
     }
 
-    public AttemptsList getAttemptsList(){
+    public AttemptsList getAttemptsList() {
         return attemptsList;
     }
 
-    public String getJsonList(){
+    public String getJsonList() {
+        log.info("Timestamp (getJsonList): " + System.currentTimeMillis());
         return attemptsList.listToJson();
     }
 
+    public void ajaxListener() {
+        log.info("Timestamp (ajaxListener): " + System.currentTimeMillis());
+        log.info(attempt.toString());
+    }
 }

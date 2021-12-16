@@ -15,9 +15,9 @@ import java.util.Objects;
 @SessionScoped
 @AllArgsConstructor @Getter @Setter
 public class Coordinates implements Serializable {
-    private double x;
-    private double y;
-    private double r;
+    private double x = 0.0;
+    private double y = 0.0;
+    private double r = 0.0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

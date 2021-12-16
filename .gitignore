@@ -4,4 +4,5 @@
 /build/
 /property.txt
 /properties
-/dbproperties
+/src/main/resources/META-INF/persistence.xml
+/docker/standalone.xml

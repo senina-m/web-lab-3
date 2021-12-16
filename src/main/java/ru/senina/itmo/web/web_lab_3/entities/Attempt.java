@@ -2,11 +2,15 @@ package ru.senina.itmo.web.web_lab_3.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import lombok.extern.java.Log;
 
+import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
+import javax.inject.Named;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-
+@Log
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,21 +19,21 @@ public class Attempt implements Serializable {
 
     @OneToOne(mappedBy = "attempt", cascade = CascadeType.ALL)
     @JoinColumn(name = "coordinates", nullable = false)
-    private Coordinates coordinates;
-    private boolean doFitArea;
+    private Coordinates coordinates = new Coordinates(0.0, 0.0, 1.0); //fixme set r = 0.0
+    private boolean doFitArea = true;
 
     @Id @PrimaryKeyJoinColumn
     @JsonIgnore
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    private Long id = null;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
-    private Owner owner;
+    private Owner owner = null;
 
-    public Attempt(Coordinates coordinates, boolean check) {
+    public Attempt(Coordinates coordinates, boolean doFitArea) {
         this.coordinates = coordinates;
-        this.doFitArea = check;
+        this.doFitArea = doFitArea;
         this.owner = null;
         this.id = null;
     }
@@ -50,6 +54,12 @@ public class Attempt implements Serializable {
                 "), doFitArea=" + doFitArea +
                 ", id=" + id +
                 ", owner isn't null=" + (Objects.nonNull(owner)) +
+                " " + System.currentTimeMillis() +
                 '}';
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        log.info("Timestamp(setCoordinates) " + System.currentTimeMillis() + " " + coordinates.toString());
+        this.coordinates = coordinates;
     }
 }

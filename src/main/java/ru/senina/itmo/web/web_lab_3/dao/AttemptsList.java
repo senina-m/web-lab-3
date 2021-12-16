@@ -23,15 +23,12 @@ import java.util.logging.Level;
 public class AttemptsList implements Serializable {
     private @Inject
     AttemptsListJsonParser parser;
-    private @Inject
-    DBManager dbManager;
 
     @Setter
-    private List<Attempt> list = Collections.synchronizedList(new LinkedList<>());
+    private List<Attempt> list = new LinkedList<>();
 
     public void add(Attempt attempt) {
         list.add(attempt);
-        //todo: send request to db to add attempt there too
     }
 
     public Attempt[] getList() {

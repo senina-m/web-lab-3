@@ -54,6 +54,7 @@ drawPlotWithPoints = (attemptsArray) => {
     scale = countScale(pointsArray);
     let lastPoint = pointsArray[pointsArray.length - 1];
     const r = lastPoint.r;
+    currentR = r;
     console.log('R = ' + r);
     drawArea(r);
 
@@ -191,10 +192,18 @@ drawAxesScaleLabels = (r) => {
 drawGrid = () => {
     let numOfLines = WIDTH * scale / 2;
     for (let i = 1; i < numOfLines; i++) {
+        //vertical lines
         let lineLeft = CANVAS.line(convertX(i), 0, convertX(i), HEIGHT);
         let lineRight = CANVAS.line(convertX(-i), 0, convertX(-i), HEIGHT);
+        //horizontal lines
+        let lineUp = CANVAS.line(0, convertX(i), WIDTH, convertX(i));
+        let lineBottom = CANVAS.line(0, convertX(-i), WIDTH, convertX(-i));
+
         lineLeft.stroke({width: 0.5, color: AXES_COLOR, dasharray: '5,5'});
         lineRight.stroke({width: 0.5, color: AXES_COLOR, dasharray: '5,5'});
+
+        lineUp.stroke({width: 0.5, color: AXES_COLOR, dasharray: '5,5'});
+        lineBottom.stroke({width: 0.5, color: AXES_COLOR, dasharray: '5,5'});
     }
 }
 
@@ -222,7 +231,10 @@ drawArea = (r) => {
 
 drawPoint = (x, y, result, pointScale) => {
     let color = result === true ? '#0f0' : '#f00';
-    CANVAS.circle(pointScale).fill(color).move(convertX(x) - pointScale / 2, convertY(y) - pointScale / 2);
+    const pointX = convertX(x) - pointScale / 2;
+    const pointY = convertY(y) - pointScale / 2;
+    CANVAS.circle(pointScale + 1).fill(AREA_COLOR).move(pointX, pointY);
+    CANVAS.circle(pointScale).fill(color).move(pointX, pointY);
 }
 
 getCoordinates = () => {
@@ -233,24 +245,6 @@ getCoordinates = () => {
     return [x, y, r]
 }
 
-// function clickPointEvent(event) {
-//     console.log('Start drawing point after click! Received coords: ' + event.clientX + ', ' + event.clientY);
-//     let plot = document.getElementById('plot');
-//     let coordinates = getCoords(event, plot);
-//     if (!isNaN(coordinates.r)) {
-//         document.getElementById('x').value = coordinates.x;
-//         document.getElementById('y').value = coordinates.y;
-//         document.getElementById('r').value = coordinates.r;
-//         removeErrors();
-//         if (checkValues(coordinates)) {
-//             console.log('Try to draw point after click. Coordinates: x: ' + coordinates.x + ', y: ' + coordinates.y + ', r: ' + coordinates.r);
-//             update - command()
-//         }
-//     } else {
-//         document.getElementById("error").classList.remove("hide");
-//     }
-// }
-
 function getCoords(event, element) {
     let coordinates = {};
     let xPosition = element.getBoundingClientRect().left;
@@ -259,11 +253,11 @@ function getCoords(event, element) {
     console.log('yPosition: ' + yPosition + ' Y: ' + (event.clientY - yPosition));
 
     let plot = document.getElementById("plot");
-    WIDTH = plot.getBoundingClientRect().width;
-    HEIGHT = plot.getBoundingClientRect().height;
+    // WIDTH = plot.getBoundingClientRect().width;
+    // HEIGHT = plot.getBoundingClientRect().height;
     coordinates.x = Math.round(convertToCoordinatesX(event.clientX - xPosition));
     coordinates.y = convertToCoordinatesY(event.clientY - yPosition);
-    coordinates.r = document.getElementById("r").value; //get r from the form
+    coordinates.r = currentR;
     console.log('X: ' + coordinates.x);
     console.log('Y: ' + coordinates.y);
     console.log('R: ' + coordinates.r);

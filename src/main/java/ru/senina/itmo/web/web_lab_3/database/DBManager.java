@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -21,9 +20,11 @@ import java.util.logging.Level;
 @Named()
 @ApplicationScoped
 public class DBManager {
-//    private static final EntityManagerFactory entityManagerFactory = setEntityManagerFactoryWithProperties();
-@PersistenceUnit(name = "MyJPAModel")
-private  EntityManagerFactory entityManagerFactory;
+    //    private static final EntityManagerFactory entityManagerFactory = setEntityManagerFactoryWithProperties();
+    @PersistenceUnit(name = "MyJPAModel")
+    private EntityManagerFactory entityManagerFactory;
+
+    //fixme: think if i need to create entity manager again in each method
 
     { //free the resource if shutdown
         Thread shutdownHook = new Thread(this::finish);
@@ -54,14 +55,14 @@ private  EntityManagerFactory entityManagerFactory;
         assert entityManagerFactory != null;
         EntityManager manager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = null;
-            Owner owner = getOwnerBySessionId(manager, userSessionId);
-            log.log(Level.WARNING, owner.toString());
-            attempt.setOwner(owner);
-            log.log(Level.WARNING, attempt.toString());
-            owner.getAttemptList().add(attempt);
-            log.log(Level.WARNING, owner.toString());
-            attempt.getCoordinates().setAttempt(attempt);
-            log.log(Level.WARNING, attempt.toString());
+
+        Owner owner = getOwnerBySessionId(manager, userSessionId);
+        attempt.setOwner(owner);
+        owner.getAttemptList().add(attempt);
+        attempt.getCoordinates().setAttempt(attempt);
+
+        log.log(Level.INFO, owner.toString());
+        log.log(Level.INFO, attempt.toString());
 
         try {
             transaction = manager.getTransaction();
@@ -115,13 +116,13 @@ private  EntityManagerFactory entityManagerFactory;
         Owner theOwner;
         try {
             return (Owner) query.getSingleResult();
-        }catch (Exception e){
+        } catch (Exception e) {
             theOwner = Owner.initOwner();
             theOwner.setSessionId(sessionId);
             log.log(Level.WARNING, "Searching for owner with given id failed with error: " + e.getMessage());
             log.log(Level.WARNING, "There were some exceptions during adding Attempt. " + e);
             log.log(Level.WARNING, "the owner:" + theOwner);
-            return  theOwner;
+            return theOwner;
         }
     }
 }
