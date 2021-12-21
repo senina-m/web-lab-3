@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Optional;
 
 @Dependent
-public class CoordinatesValidator implements Serializable {
+public class CoordinatesValidator implements Serializable  {
     public void validate(Coordinates coordinates){
         double x = Optional.of(coordinates.getX()).orElseThrow(NoCoordinatesParametersInRequest::new);
         double y = Optional.of(coordinates.getY()).orElseThrow(NoCoordinatesParametersInRequest::new);
@@ -27,5 +27,4 @@ public class CoordinatesValidator implements Serializable {
             throw new CoordinatesOutOfBoundsException(r, "r");
         }
     }
-
 }

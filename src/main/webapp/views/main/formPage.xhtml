@@ -25,36 +25,38 @@
 
      <h:form id='form'>
          <p id="x_block">
-             <h:outputLabel value="X:" for="x"/> <br/>
-             <p:spinner rendered="true" id="x" stepFactor="0.5" a:placeholder="Enter X value"
-                        value="#{attemptManager.attempt.coordinates.x}" styleClass="x_field">
-                 <f:validateRequired/>
+             <h:outputLabel value="X:" for="x"/>
+             <p:spinner rendered="true" id="x" stepFactor="0.5"
+                        a:placeholder="value from -4 to 4"
+                        value="#{attemptManager.attempt.coordinates.x}"
+                        styleClass="x_field"
+                        validatorMessage="X has to be from -4 to 4!" >
                  <f:validateLongRange minimum="-4" maximum="4"/>
              </p:spinner>
-             <h:message for="x"/>
+             <p:message for="x" display="text"/>
          </p>
 
          <p id="y_block">
-             <p:outputLabel value="Y:" for="y"/> <br/>
-             <p:inputText rendered="true" id="y" maxlength="5"
-                          a:placeholder="Y has to be between -5 and 5"
+             <p:outputLabel value="Y:" for="y"/>
+             <p:inputText rendered="true" id="y"
+                          a:placeholder="value from -5 and 5"
                           value="#{attemptManager.attempt.coordinates.y}"
-                          styleClass="y_field">
-                 <f:validateRequired/>
-                 <f:validateDoubleRange minimum="-5" maximum="5"/>
+                          styleClass="y_field" maxlength="2"
+                          validatorMessage="Y has to be from -R to R!">
+                 <f:validateLongRange minimum="-5" maximum="5"/>
              </p:inputText>
-             <h:message for="y" id="yLable"/>
+             <p:message for="y" display="text"/>
          </p>
 
          <p id="r_block" class="r_field">
-             <p:commandButton value="1" styleClass="RButton b1" id="r1" action="#{attemptManager.addToList(1)}" update="draw attemts_table"/>
-             <p:commandButton value="2" styleClass="RButton b2" id="r2" action="#{attemptManager.addToList(2)}" update="draw attemts_table"/>
-             <p:commandButton value="3" styleClass="RButton b3" id="r3" action="#{attemptManager.addToList(3)}" update="draw attemts_table"/>
-             <p:commandButton value="4" styleClass="RButton b4" id="r4" action="#{attemptManager.addToList(4)}" update="draw attemts_table"/>
-             <p:commandButton value="5" styleClass="RButton b5" id="r5" action="#{attemptManager.addToList(5)}" update="draw attemts_table"/>
+             <p:commandButton value="1" styleClass="RButton b1" id="r1" action="#{attemptManager.addToList(1)}" update="draw attemts_table y x"/>
+             <p:commandButton value="2" styleClass="RButton b2" id="r2" action="#{attemptManager.addToList(2)}" update="draw attemts_table y x"/>
+             <p:commandButton value="3" styleClass="RButton b3" id="r3" action="#{attemptManager.addToList(3)}" update="draw attemts_table y x"/>
+             <p:commandButton value="4" styleClass="RButton b4" id="r4" action="#{attemptManager.addToList(4)}" update="draw attemts_table y x"/>
+             <p:commandButton value="5" styleClass="RButton b5" id="r5" action="#{attemptManager.addToList(5)}" update="draw attemts_table y x"/>
          </p>
 
-         <p:remoteCommand name="submitClick" update="draw attemts_table" action="#{attemptManager.processClick}"/>
+         <p:remoteCommand name="submitClick" update="draw attemts_table y x" action="#{attemptManager.processClick}"/>
 
          <h:outputLabel value="#{attemptManager.getJsonList()}"/>
      </h:form>
