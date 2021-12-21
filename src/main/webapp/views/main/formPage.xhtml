@@ -54,7 +54,7 @@
              <p:commandButton value="5" styleClass="RButton b5" id="r5" action="#{attemptManager.addToList(5)}" update="draw attemts_table"/>
          </p>
 
-         <p:remoteCommand name="submitClick" update="draw attemts_table" action="#{attemptManager.addToList(r)}"/>
+         <p:remoteCommand name="submitClick" update="draw attemts_table" action="#{attemptManager.processClick}"/>
 
          <h:outputLabel value="#{attemptManager.getJsonList()}"/>
      </h:form>

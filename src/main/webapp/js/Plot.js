@@ -18,9 +18,9 @@ let globalAttemptsArray = [];
 
 drawPlot = (attemptsArray) => {
     console.log("Полученный массив точек: \"" + attemptsArray + "\"");
-    if(CANVAS === null){
+    if (CANVAS === null) {
         console.log("CANVAS wasn't init yet!")
-    }else if (attemptsArray.length === 0) {
+    } else if (attemptsArray.length === 0) {
         initPlot();
     } else {
         globalAttemptsArray = attemptsArray;
@@ -237,29 +237,38 @@ drawPoint = (x, y, result, pointScale) => {
     CANVAS.circle(pointScale).fill(color).move(pointX, pointY);
 }
 
-getCoordinates = () => {
-    let x = parseInt(document.getElementById('x').value)
-    let y = parseFloat(document.getElementById('y').value)
-    let r = parseFloat(document.getElementById('r').value)
-    console.log(x + ', ' + y + ', ' + r)
-    return [x, y, r]
-}
-
-function getCoords(event, element) {
+getCoords = (event, element) => {
     let coordinates = {};
     let xPosition = element.getBoundingClientRect().left;
     let yPosition = element.getBoundingClientRect().top;
-    console.log('xPosition: ' + xPosition + ' X: ' + (event.clientX - xPosition));
-    console.log('yPosition: ' + yPosition + ' Y: ' + (event.clientY - yPosition));
+    let width = element.getBoundingClientRect().width;
+    let height = element.getBoundingClientRect().height;
 
+    console.log('xPosition: ' + xPosition + ' X: ' + (event.clientX - xPosition) * (WIDTH / width));
+    console.log('yPosition: ' + yPosition + ' Y: ' + (event.clientY - yPosition) * (HEIGHT / height));
     let plot = document.getElementById("plot");
-    // WIDTH = plot.getBoundingClientRect().width;
-    // HEIGHT = plot.getBoundingClientRect().height;
-    coordinates.x = Math.round(convertToCoordinatesX(event.clientX - xPosition));
-    coordinates.y = convertToCoordinatesY(event.clientY - yPosition);
+    coordinates.x = roundToHalf(convertToCoordinatesX((event.clientX - xPosition) * (WIDTH / width)));
+    coordinates.y = convertToCoordinatesY((event.clientY - yPosition) * (HEIGHT / height));
     coordinates.r = currentR;
     console.log('X: ' + coordinates.x);
     console.log('Y: ' + coordinates.y);
     console.log('R: ' + coordinates.r);
     return coordinates;
+}
+
+roundToHalf = (number) => {
+    let rounded = Math.round(number);
+    if (rounded < number) {
+        if (number < rounded + 0.25) {
+            return rounded;
+        } else {
+            return rounded + 0.5;
+        }
+    } else {
+        if (number + 0.25 < rounded) {
+            return rounded + 0.5;
+        } else {
+            return rounded;
+        }
+    }
 }

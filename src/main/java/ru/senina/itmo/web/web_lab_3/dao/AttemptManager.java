@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.logging.Level;
 
 @Named("attemptManager")
@@ -45,18 +46,23 @@ public class AttemptManager implements Serializable {
         validator.validate(coordinates);
     }
 
+    public void processClick(){
+        try {
+            log.info("Timestamp (processClick): " + System.currentTimeMillis());
+            FacesContext context = FacesContext.getCurrentInstance();
+            Map<String, String> map = context.getExternalContext().getRequestParameterMap();
+            attempt.getCoordinates().setX(Double.parseDouble(map.get("x_val")));
+            attempt.getCoordinates().setY(Double.parseDouble(map.get("y_val")));
+            addToList(Double.parseDouble(map.get("r_val")));
+        }catch (NullPointerException e){
+            log.warning("Some coordinates were null!");
+        }
+    }
+
     public void addToList(double r) {
         try {
-            if(r == 0){
-                r = Double.parseDouble(FacesContext
-                        .getCurrentInstance()
-                        .getExternalContext()
-                        .getRequestParameterMap()
-                        .get("r_val"));
-            }
-            attempt.getCoordinates().setR(r);
-            log.info("R value = " + r);
             log.info("Timestamp (addToList): " + System.currentTimeMillis());
+            attempt.getCoordinates().setR(r);
             log.log(Level.INFO, attempt.getCoordinates().toString());
 
             checkCoordinates(attempt.getCoordinates());

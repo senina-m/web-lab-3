@@ -14,18 +14,16 @@ initCanvas = () => {
 }
 
 plotClickListener = () => {
-    //fixme
-    document.getElementById("plot").onclick = (event) => {
+    let plot = document.getElementById('plot');
+    plot.onclick = () => {
         console.log('Start drawing point after click! Received coords: ' + event.clientX + ', ' + event.clientY);
         let plot = document.getElementById('plot');
         let coordinates = getCoords(event, plot);
-        document.querySelector(".x_field").value = coordinates.x;
-        document.querySelector(".y_field").value = coordinates.y;
-        let r = coordinates.r;
-        if(Number.isInteger(r) && r <= 5 && r >= 1){
-            submitClick({r:r});
+        if (!isNaN(coordinates.r) && coordinates.r <= 5 && coordinates.r >= 1) {
+            console.log('Try to draw point after click. Coordinates: x: ' + coordinates.x + ', y: ' + coordinates.y + ', r: ' + coordinates.r);
+            submitClick([{'name':'x_val', 'value': coordinates.x},{'name':'y_val', 'value': coordinates.y}, {'name':'r_val', 'value': coordinates.r}]);
         }
-    };
+    }
 }
 
 initTimer = () => {
