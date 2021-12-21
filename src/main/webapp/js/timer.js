@@ -6,7 +6,7 @@ function setDate(date) {
     day = (day < 10) ? '0' + day : day;
     month = (month < 10) ? '0' + month : month;
 
-    document.getElementById('date').innerHTML = `${day}.${month}.${year}`;
+    document.getElementById('date').innerHTML = (day.toString() + ":"  + month.toString() + ":" + year.toString());
 }
 
 function setTime(date) {
@@ -18,7 +18,7 @@ function setTime(date) {
     minutes = (minutes < 10) ? '0' + minutes : minutes;
     seconds = (seconds < 10) ? '0' + seconds : seconds;
 
-    document.getElementById('time').innerHTML = `${hours}:${minutes}:${seconds}`;
+    document.getElementById('time').innerHTML = hours.toString() + ":"  + minutes.toString() + ":" + seconds.toString();
 }
 
 function setCurrentDateTime() {

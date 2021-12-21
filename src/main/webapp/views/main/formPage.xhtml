@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../../styles/mobile.css"/>
     <link rel="stylesheet" href="../../styles/screen.css"/>
     <script src="../../js/Plot.js" type="application/javascript"></script>
+    <script src="../../js/timer.js" type="application/javascript"></script>
     <script src="../../js/onPageLoad.js" type="application/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js" type="application/javascript"></script>
 
@@ -43,7 +44,7 @@
                           value="#{attemptManager.attempt.coordinates.y}"
                           styleClass="y_field" maxlength="2"
                           validatorMessage="Y has to be from -R to R!">
-                 <f:validateLongRange minimum="-5" maximum="5"/>
+                 <f:validateLongRange minimum="-5" maximum="5"/> <!--set the input id to update to let jsf show errors-->
              </p:inputText>
              <p:message for="y" display="text"/>
          </p>
