@@ -17,12 +17,9 @@ import java.util.List;
 import java.util.logging.Level;
 
 @Log
-@Named()
-@SessionScoped
 @NoArgsConstructor
 public class AttemptsList implements Serializable {
-    private @Inject
-    AttemptsListJsonParser parser;
+    private final AttemptsListJsonParser parser = new AttemptsListJsonParser();
 
     @Setter
     private List<Attempt> list = new LinkedList<>();

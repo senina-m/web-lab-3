@@ -67,7 +67,7 @@
 
      <div>
          <h:panelGroup id="attemts_table">
-             <h:dataTable id="result_table" styleClass="styled-table" value="#{attemptsList.getList()}" var="attempt">
+             <h:dataTable id="result_table" styleClass="styled-table" value="#{attemptManager.getList()}" var="attempt">
                  <h:column>
                      <f:facet name="header">X</f:facet>
                      <h:outputText value="#{attempt.coordinates.x}"/>

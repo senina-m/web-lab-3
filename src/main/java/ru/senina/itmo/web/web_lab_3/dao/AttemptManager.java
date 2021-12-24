@@ -3,6 +3,7 @@ package ru.senina.itmo.web.web_lab_3.dao;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import ru.senina.itmo.web.web_lab_3.database.DBManager;
 import ru.senina.itmo.web.web_lab_3.entities.Attempt;
 import ru.senina.itmo.web.web_lab_3.entities.Coordinates;
 import ru.senina.itmo.web.web_lab_3.exceptions.CoordinatesOutOfBoundsException;
@@ -28,9 +29,7 @@ public class AttemptManager implements Serializable {
     private PlotAreaChecker checker; //todo: use new areaCheckBuilder
     @Inject
     private CoordinatesValidator validator;
-    @Inject
-    private AttemptsList attemptsList;
-//    @Inject private DBManager dbManager;
+    @Inject private DBManager dbManager;
 
 
     public AttemptManager() {
@@ -67,11 +66,10 @@ public class AttemptManager implements Serializable {
 
             checkCoordinates(attempt.getCoordinates());
             attempt.setDoFitArea(checkAttemptDoFitArea(attempt));
-            attemptsList.add(attempt);
+//            attemptsList.add(attempt);
             log.log(Level.INFO, "New Attempt added: " + attempt + " User id: " +
                     FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
-
-//            dbManager.addElement(attempt, FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
+            dbManager.addElement(attempt, FacesContext.getCurrentInstance().getExternalContext().getSessionId(true));
         } catch (CoordinatesOutOfBoundsException exception) {
             log.log(Level.WARNING, "Incorrect data came to JSF: \n" + exception.getMessage());
         } catch (Exception exception) {
@@ -81,17 +79,15 @@ public class AttemptManager implements Serializable {
         }
     }
 
-    public AttemptsList getAttemptsList() {
-        return attemptsList;
-    }
-
     public String getJsonList() {
         log.info("Timestamp (getJsonList): " + System.currentTimeMillis());
-        return attemptsList.listToJson();
+        AttemptsList attemptList =  new AttemptsList();
+        attemptList.setList(dbManager.readAll());
+        return attemptList.listToJson();
     }
 
-    public void ajaxListener() {
-        log.info("Timestamp (ajaxListener): " + System.currentTimeMillis());
-        log.info(attempt.toString());
+
+    public Attempt[] getList(){
+        return dbManager.readAll().toArray(new Attempt[0]);
     }
 }
