@@ -29,6 +29,8 @@
 .plot {
     margin-left: 3%;
     margin-right: 5%;
+    width: 70%;
+    height: 70%;
 }
 
 .form {
@@ -36,8 +38,8 @@
     height: 200%;
 }
 
-.table{
-    width: 100%;
+.styled-table{
+    width: 70%;
 }
 
 .description {

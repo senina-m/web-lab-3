@@ -2,7 +2,7 @@ runPageOnloadFunctions = () => {
     console.log("hey, we are here in init page!")
     initCanvas();
     plotClickListener();
-    initTimer();
+    // initTimer();
 }
 
 initCanvas = () => {
@@ -26,8 +26,3 @@ plotClickListener = () => {
     }
 }
 
-initTimer = () => {
-    const DELAY = 7000;
-    setCurrentDateTime();
-    setInterval(setCurrentDateTime, DELAY);
-}

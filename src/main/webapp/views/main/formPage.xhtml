@@ -10,10 +10,9 @@
 <h:head>
     <title>Web Lab 3</title>
     <link rel="stylesheet" href="../../styles/main.css"/>
-    <link rel="stylesheet" href="../../styles/mobile.css"/>
-    <link rel="stylesheet" href="../../styles/screen.css"/>
+    <link rel="stylesheet" media="handled" href="../../styles/mobile.css"/>
+    <link rel="stylesheet" media="screen and (min-width: 1150px)" href="../../styles/screen.css"/>
     <script src="../../js/Plot.js" type="application/javascript"></script>
-    <script src="../../js/timer.js" type="application/javascript"></script>
     <script src="../../js/onPageLoad.js" type="application/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js" type="application/javascript"></script>
 
@@ -58,8 +57,6 @@
          </p>
 
          <p:remoteCommand name="submitClick" update="draw attemts_table y x" action="#{attemptManager.processClick}"/>
-
-         <h:outputLabel value="#{attemptManager.getJsonList()}"/>
      </h:form>
 
      <p:outputPanel styleClass="draw" id="draw">
@@ -70,7 +67,7 @@
 
      <div>
          <h:panelGroup id="attemts_table">
-             <h:dataTable id="result_table" value="#{attemptsList.getList()}" var="attempt">
+             <h:dataTable id="result_table" styleClass="styled-table" value="#{attemptsList.getList()}" var="attempt">
                  <h:column>
                      <f:facet name="header">X</f:facet>
                      <h:outputText value="#{attempt.coordinates.x}"/>
@@ -93,11 +90,8 @@
              </h:dataTable>
          </h:panelGroup>
      </div>
-
      <div class="for_link">
-         <h:link styleClass="link_to-index" outcome="">
-             Go to start page
-         </h:link>
+         <a href="/web-lab-3-1.0/views/main/timer.xhtml">to start page...</a>
      </div>
  </h:body>
  </html>

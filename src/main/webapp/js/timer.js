@@ -6,7 +6,7 @@ function setDate(date) {
     day = (day < 10) ? '0' + day : day;
     month = (month < 10) ? '0' + month : month;
 
-    document.getElementById('date').innerHTML = (day.toString() + ":"  + month.toString() + ":" + year.toString());
+    document.getElementById('date').innerHTML = (day.toString() + "."  + month.toString() + "." + year.toString());
 }
 
 function setTime(date) {
